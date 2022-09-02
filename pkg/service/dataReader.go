@@ -26,7 +26,7 @@ func (d *dataReader) Run() error {
 	defer close(d.streamChannel)
 
 	// Open file to read.
-	file, err := os.Open(d.config.JsonFile)
+	file, err := os.Open(d.config.DataFile)
 	if err != nil {
 		log.Fatal("Error in opening file to read")
 		return err

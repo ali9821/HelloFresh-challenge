@@ -3,7 +3,7 @@ package cfg
 import "github.com/spf13/viper"
 
 type Config struct {
-	JsonFile                            string
+	DataFile                            string
 	Output                              string
 	MaxUniqueRecipeWorkersSize          int
 	MaxMostPostCodeDeliveredWorkersSize int
@@ -23,21 +23,21 @@ func NewConfig() *Config {
 	setDefaults(v)
 
 	return &Config{
-		JsonFile:                            v.GetString("json_file"),
+		DataFile:                            v.GetString("data_file"),
 		Output:                              v.GetString("output_format"),
-		MaxUniqueRecipeWorkersSize:          v.GetInt("max_UniqueRecipeWorkers_size"),
-		MaxMostPostCodeDeliveredWorkersSize: v.GetInt("max_mostPostCodeDeliveredWorkers_size"),
-		MaxSpecificPostCodeWorkersSize:      v.GetInt("max_specificPostCodeWorkers_size"),
-		MaxRecipeListWorkersSize:            v.GetInt("max_recipeListWorkers_size"),
+		MaxUniqueRecipeWorkersSize:          v.GetInt("max_unique_recipe_workers_size"),
+		MaxMostPostCodeDeliveredWorkersSize: v.GetInt("max_most_post_code_delivered_workers_size"),
+		MaxSpecificPostCodeWorkersSize:      v.GetInt("max_specific_post_code_workers_size"),
+		MaxRecipeListWorkersSize:            v.GetInt("max_recipe_list_workers_size"),
 	}
 
 }
 
 func setDefaults(v *viper.Viper) {
-	v.SetDefault("json_file", "data.json")
+	v.SetDefault("data_file", "data.json")
 	v.SetDefault("output_format", "stdout")
-	v.SetDefault("max_UniqueRecipeWorkers_size", 100)
-	v.SetDefault("max_mostPostCodeDeliveredWorkers_size", 100)
-	v.SetDefault("max_specificPostCodeWorkers_size", 100)
-	v.SetDefault("max_recipeListWorkers_size", 100)
+	v.SetDefault("max_unique_recipe_workers_size", 100)
+	v.SetDefault("max_most_post_code_delivered_workers_size", 100)
+	v.SetDefault("max_specific_post_code_workers_size", 100)
+	v.SetDefault("max_recipe_list_workers_size", 100)
 }
