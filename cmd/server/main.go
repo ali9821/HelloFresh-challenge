@@ -9,7 +9,7 @@ import (
 func main() {
 	log.Println("task started")
 	factory := cmd.NewFactory()
-
+	doneChannel := factory.DoneChan
 	for _, runner := range factory.PipelineStages {
 		go func(runner model.Runner) {
 			err := runner.Run()
@@ -18,5 +18,5 @@ func main() {
 			}
 		}(runner)
 	}
-
+	<-doneChannel
 }

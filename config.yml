@@ -1,0 +1,6 @@
+data_file: "data2.json"
+output: "stdout"
+max_unique_recipe_workers_size: 100
+max_most_post_code_delivered_workers_size: 100
+max_specific_post_code_workers_size: 100
+max_recipe_list_workers_size: 100

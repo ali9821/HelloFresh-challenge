@@ -7,23 +7,19 @@ import (
 )
 
 type processor struct {
-	streamChannel             chan model.Order
-	uniqueRecipeChan          chan model.Order
-	mostPostCodeDeliveredChan chan model.Order
-	specificPostCodeChan      chan model.Order
-	recipeListChan            chan model.Order
-	config                    *cfg.Config
+	orderChan      chan model.Order
+	recipeChan     chan string
+	postalCodeChan chan model.Order
+	config         *cfg.Config
 }
 
-func NewDistributorService(streamChannel chan model.Order, uniqueRecipeChan chan model.Order, mostPostCodeDeliveredChan chan model.Order, specificPostCodeChan chan model.Order, recipeListChan chan model.Order, config *cfg.Config) model.Runner {
+func NewDistributorService(streamChannel chan model.Order, recipeChan chan string, postalCodeChan chan model.Order, config *cfg.Config) model.Runner {
 
 	return &processor{
-		streamChannel:             streamChannel,
-		config:                    config,
-		uniqueRecipeChan:          uniqueRecipeChan,
-		mostPostCodeDeliveredChan: mostPostCodeDeliveredChan,
-		specificPostCodeChan:      specificPostCodeChan,
-		recipeListChan:            recipeListChan,
+		orderChan:      streamChannel,
+		config:         config,
+		recipeChan:     recipeChan,
+		postalCodeChan: postalCodeChan,
 	}
 }
 
@@ -34,15 +30,17 @@ func (p *processor) Run() error {
 		go p.Worker(&wg)
 	}
 	wg.Wait()
+	close(p.recipeChan)
+	close(p.postalCodeChan)
 	return nil
 }
 
 func (p *processor) Worker(wg *sync.WaitGroup) {
 	defer wg.Done()
-	for data := range p.streamChannel {
-		p.uniqueRecipeChan <- data
-		p.mostPostCodeDeliveredChan <- data
-		p.specificPostCodeChan <- data
-		p.recipeListChan <- data
+	for order := range p.orderChan {
+		p.recipeChan <- order.Recipe
+		p.postalCodeChan <- order
+		//p.recipeListChan <- order
 	}
+
 }
